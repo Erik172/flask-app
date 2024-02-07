@@ -14,8 +14,16 @@ class User(db.Model):
         return {
             'user_id': self.user_id,
             'username': self.username,
-            'image_path': self.image_path
+            'image_path': self.image_path,
+            # 'created_at': self.created_at
         }
+    
+    def check_password(self, password):
+        print(self.password, password)
+        return self.password == password
+    
+    def __repr__(self):
+        return f'<User {self.username}>'
 
 class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -31,7 +39,8 @@ class Task(db.Model):
     task_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
     category_id = db.Column(db.Integer, db.ForeignKey('category.category_id'))
-    task_text = db.Column(db.Text)
+    task_title = db.Column(db.String(255), nullable=False)
+    task_description = db.Column(db.Text, nullable=True, default=None)
     task_status = db.Column(db.String(20), default='Sin Empezar')
     date_to_end = db.Column(db.Date, default=None)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
@@ -44,7 +53,8 @@ class Task(db.Model):
             'task_id': self.task_id,
             'user_id': self.user_id,
             'category_id': self.category_id,
-            'task_text': self.task_text,
+            'task_title': self.task_title,
+            'task_description': self.task_description,
             'task_status': self.task_status,
             'date_to_end': self.date_to_end
         }

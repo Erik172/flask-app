@@ -19,7 +19,7 @@ class CategoryResource(Resource):
             if category:
                 return category.serialize(), 200
             else:
-                return {'message': 'Categoría no encontrada'}, 404
+                return {'message': 'Categoria no encontrada'}, 404
 
     def post(self):
         data = request.json
@@ -49,6 +49,9 @@ class CategoryResource(Resource):
         except ValidationError as err:
             return {'message': 'Error de validación', 'errors': err.messages}, 400
         
+        if Category.query.filter_by(category_name=updated_category['category_name']).first():
+            return {'message': 'La categoría ya existe'}, 400
+        
         category.category_name = updated_category['category_name']
         db.session.commit()
         return {'message': 'Categoría actualizada con éxito'}, 200
@@ -61,8 +64,4 @@ class CategoryResource(Resource):
         db.session.delete(category)
         db.session.commit()
         return {'message': 'Categoría eliminada con éxito'}, 200
-    def serialize(self):
-        return {
-            'category_id': self.category_id,
-            'category_name': self.category_name
-        }
+

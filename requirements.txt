@@ -3,3 +3,5 @@ flask-restful
 Flask-SQLAlchemy
 marshmallow-sqlalchemy
 Flask-Migrate
+gunicorn
+flask-jwt-extended
