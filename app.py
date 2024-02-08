@@ -7,6 +7,7 @@ from src.db import db
 from src.resources.categories import CategoryResource
 from src.resources.users import UserResource
 from src.resources.login import Login
+from src.resources.tasks import TaskResource
 
 from flask_jwt_extended import JWTManager
 from flask_jwt_extended import jwt_required
@@ -18,7 +19,7 @@ api = Api(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = 'super-secret' # Cambiar por un valor secreto
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(minutes=5)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
 jwt = JWTManager(app)
 
 Migrate(app, db)
@@ -34,8 +35,7 @@ def protected():
 api.add_resource(Login, '/login')
 api.add_resource(CategoryResource, '/categories', '/categories/<int:category_id>')
 api.add_resource(UserResource, '/users', '/users/<int:user_id>')
-
-#TODO: Agregar recursos para User, Task y Login
+api.add_resource(TaskResource, '/tasks', '/tasks/<int:task_id>')
 
 if __name__ == '__main__':
     app.run(debug=True)
