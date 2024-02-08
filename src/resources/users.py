@@ -6,6 +6,7 @@ from marshmallow import Schema, fields, ValidationError
 class UserSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(required=True)
+    image_path = fields.Str(required=False, default='https://icons8.com/icon/ABBSjQJK83zf/user', missing='https://icons8.com/icon/ABBSjQJK83zf/user')
 
 class UserResource(Resource):
     def get(self, user_id=None):
@@ -53,11 +54,9 @@ class UserResource(Resource):
         if updated_user['password'] == user.password:
             return {'message': 'La contraseña no puede ser la misma'}, 400
         
-        if updated_user['image_path'] is not None:
-            user.image_path = updated_user['image_path']
-        
         user.username = updated_user['username']
         user.password = updated_user['password']
+        user.image_path = updated_user['image_path']
         db.session.commit()
         return {'message': 'Usuario actualizado con éxito'}, 200
     
