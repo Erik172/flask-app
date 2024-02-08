@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -15,7 +16,7 @@ class User(db.Model):
             'user_id': self.user_id,
             'username': self.username,
             'image_path': self.image_path,
-            # 'created_at': self.created_at
+            'created_at': datetime.strftime(self.created_at, '%Y-%m-%d %H:%M:%S')
         }
     
     def check_password(self, password):
@@ -58,7 +59,8 @@ class Task(db.Model):
             'task_title': self.task_title,
             'task_description': self.task_description,
             'task_status': self.task_status,
-            'date_to_end': self.date_to_end
+            'date_to_end': self.date_to_end,
+            'created_at': datetime.strftime(self.created_at, '%Y-%m-%d %H:%M:%S')
         }
 
 
