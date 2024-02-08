@@ -28,11 +28,13 @@ class User(db.Model):
 class Category(db.Model):
     category_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     category_name = db.Column(db.String(255), nullable=False)
+    category_description = db.Column(db.Text, nullable=True, default=None)
 
     def serialize(self):
         return {
             'category_id': self.category_id,
-            'category_name': self.category_name
+            'category_name': self.category_name,
+            'category_description': self.category_description
         }
 
 class Task(db.Model):

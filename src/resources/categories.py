@@ -6,6 +6,7 @@ from marshmallow import Schema, fields, ValidationError
 # Define un esquema de Marshmallow para la validación de entrada
 class CategorySchema(Schema):
     category_name = fields.Str(required=True)
+    category_description = fields.Str(required=False)
 
 class CategoryResource(Resource):
     def get(self, category_id=None):
@@ -32,7 +33,8 @@ class CategoryResource(Resource):
         if Category.query.filter_by(category_name=category['category_name']).first():
             return {'message': 'La categoría ya existe'}, 400
         
-        new_category = Category(category_name=category['category_name'])
+        
+        new_category = Category(category_name=category['category_name'], category_description=category['category_description'])
         db.session.add(new_category)
         db.session.commit()
         return {'message': 'Categoría creada con éxito'}, 201
@@ -53,6 +55,7 @@ class CategoryResource(Resource):
             return {'message': 'La categoría ya existe'}, 400
         
         category.category_name = updated_category['category_name']
+        category.category_description = updated_category['category_description']
         db.session.commit()
         return {'message': 'Categoría actualizada con éxito'}, 200
 
