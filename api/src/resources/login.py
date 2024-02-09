@@ -1,11 +1,9 @@
 from flask_restful import Resource
 from flask import request
 from api.src.models import User
-from marshmallow import Schema, fields, ValidationError
+from marshmallow import Schema, fields
 
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import jwt_required
-from flask_jwt_extended import get_jwt_identity
 
 class LoginSchema(Schema):
     username = fields.Str(required=True)

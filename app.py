@@ -16,8 +16,11 @@ app.register_blueprint(frontend_bp)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["JWT_TOKEN_LOCATION"] = ["headers", "cookies", "json", "query_string"]
 app.config['JWT_SECRET_KEY'] = 'super-secret' # Cambiar por un valor secreto
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
+app.config["JWT_COOKIE_SECURE"] = False
+
 jwt = JWTManager(app)
 
 Migrate(app, db)
@@ -25,4 +28,4 @@ Migrate(app, db)
 db.init_app(app)
 
 if __name__ == '__main__':
-    app.run(debug=True, host='localhost', port=5000)
+    app.run(debug=True, host='localhost', port=80)
