@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from src.db import db, User
+from api.src.db import db, User
 from marshmallow import Schema, fields, ValidationError
 
 class UserSchema(Schema):

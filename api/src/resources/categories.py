@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from src.db import db, Category
+from api.src.db import db, Category
 from marshmallow import Schema, fields, ValidationError
 
 # Define un esquema de Marshmallow para la validación de entrada

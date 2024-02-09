@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request
-from src.db import User
+from api.src.db import User
 from marshmallow import Schema, fields, ValidationError
 
 from flask_jwt_extended import create_access_token
