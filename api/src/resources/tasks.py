@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from api.src.db import db, Task, User, Category
+from api.src.models import db, Task, User, Category
 from marshmallow import Schema, fields, ValidationError
 
 from flask_jwt_extended import jwt_required
