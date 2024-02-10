@@ -1,0 +1,6 @@
+__pycache__/
+instances/
+migrations/
+docs/
+.gitingore
+*.sqlite3

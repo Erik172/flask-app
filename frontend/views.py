@@ -62,12 +62,55 @@ def register():
 
         return render_template('register.html')
     
-@frontend.route('/create/task', methods=['GET'])
+@frontend.route('/tasks', methods=['GET'])
 @jwt_required(optional=True)
 def tasks():
     current_user = get_jwt_identity()
     if current_user:
+        tasks = requests.get('http://localhost/api/tasks', cookies=request.cookies).json()
+        return render_template('tasks.html', user=current_user, tasks=tasks['tasks'])
+    else:
+        return redirect(url_for('frontend.frontend.login'))
+
+    
+@frontend.route('/create/task', methods=['GET', 'POST'])
+@jwt_required(optional=True)
+def create_task():
+    current_user = get_jwt_identity()
+    if current_user:
+        if request.method == 'POST':
+            task_title = request.form['title']
+            task_descripiton = request.form['description']
+            category_id = request.form['category_id']
+            task_status = request.form['status']
+            due_date = request.form['due_date']
+            resp = requests.post('http://localhost/api/tasks', json={'task_title': task_title, 'task_description': task_descripiton, 'category_id': category_id, 'task_status': task_status, 'due_date': due_date}, cookies=request.cookies)
+            if resp.status_code == 201:
+                return redirect(url_for('frontend.frontend.test'))
+            elif resp.status_code == 400:
+                return render_template('create_task.html', error='Invalid category')
+            else:
+                return render_template('create_task.html', error='Unexpected error')
         return render_template('create_task.html', user=current_user)
+    else:
+        return redirect(url_for('frontend.frontend.login'))
+    
+@frontend.route('/categories', methods=['GET', 'POST'])
+@jwt_required(optional=True)
+def categories():
+    current_user = get_jwt_identity()
+    if current_user:
+        if request.method == 'POST':
+            category_id = request.form['category_id']
+            print(category_id)
+            resp = requests.delete(f'http://localhost/api/categories/{category_id}', cookies=request.cookies)
+            if resp.status_code == 200:
+                return redirect(url_for('frontend.frontend.categories'))
+            else:
+                return redirect(url_for('frontend.frontend.categories'), error='Unexpected error')
+            
+        categories = requests.get('http://localhost/api/categories', cookies=request.cookies).json()
+        return render_template('categories.html', user=current_user, categories=categories['categories'])
     else:
         return redirect(url_for('frontend.frontend.login'))
 

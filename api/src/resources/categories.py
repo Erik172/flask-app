@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from api.src.models import db, Category
 from marshmallow import Schema, fields, ValidationError
+from flask_jwt_extended import jwt_required
 
 # Define un esquema de Marshmallow para la validación de entrada
 class CategorySchema(Schema):
@@ -21,7 +22,7 @@ class CategoryResource(Resource):
                 return category.serialize(), 200
             else:
                 return {'message': 'Categoria no encontrada'}, 404
-
+    @jwt_required()
     def post(self):
         data = request.json
         try:
@@ -38,6 +39,7 @@ class CategoryResource(Resource):
         db.session.commit()
         return {'message': 'Categoría creada con éxito'}, 201
 
+    @jwt_required()
     def put(self, category_id):
         data = request.json
         category = Category.query.get(category_id)
@@ -58,6 +60,7 @@ class CategoryResource(Resource):
         db.session.commit()
         return {'message': 'Categoría actualizada con éxito'}, 200
 
+    @jwt_required()
     def delete(self, category_id):
         category = Category.query.get(category_id)
         if not category:
