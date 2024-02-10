@@ -32,7 +32,7 @@ def login():
                 set_access_cookies(resp, token['access_token'])
                 return resp
             else:
-                return render_template('login.html', error='Usuario o contraseña incorrectos')
+                return render_template('login.html', error='Incorrect username or password')
 
         return render_template('login.html')
 
@@ -42,6 +42,25 @@ def logout():
     unset_jwt_cookies(resp)
     return resp
 
+@frontend.route('/register', methods=['GET', 'POST'])
+@jwt_required(optional=True)
+def register():
+    current_user = get_jwt_identity()
+    if current_user:
+        return redirect(url_for('frontend.frontend.test'))
+    else:
+        if request.method == 'POST':
+            username = request.form['username']
+            password = request.form['password']
+            resp = requests.post('http://localhost/api/users', json={'username': username, 'password': password})
+            if resp.status_code == 201:
+                return redirect(url_for('frontend.frontend.login'))
+            elif resp.status_code == 400:
+                return render_template('register.html', error='User already exists')
+            else:
+                return render_template('register.html', error='Unexpected error')
+
+        return render_template('register.html')
 
 @frontend.route('/test', methods=['GET'])
 @jwt_required(optional=True) 
