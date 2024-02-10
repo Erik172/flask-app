@@ -45,7 +45,7 @@ class Task(db.Model):
     task_title = db.Column(db.String(255), nullable=False)
     task_description = db.Column(db.Text, nullable=True, default=None)
     task_status = db.Column(db.String(20), default='Sin Empezar')
-    date_to_end = db.Column(db.Date, default=None)
+    due_date = db.Column(db.Date, default=None)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
 
     user = db.relationship('User', backref=db.backref('tasks', lazy=True))
@@ -59,7 +59,7 @@ class Task(db.Model):
             'task_title': self.task_title,
             'task_description': self.task_description,
             'task_status': self.task_status,
-            'date_to_end': self.date_to_end,
+            'due_date': datetime.strftime(self.due_date, '%Y-%m-%d') if self.due_date else None,
             'created_at': datetime.strftime(self.created_at, '%Y-%m-%d %H:%M:%S')
         }
 

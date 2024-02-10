@@ -11,7 +11,7 @@ class TaskSchema(Schema):
     task_description = fields.Str(required=False, default=None, missing=None)
     task_category = fields.Str(required=True)
     task_status = fields.Str(required=False, default='Sin Empezar', missing='Sin Empezar')
-    date_to_end = fields.Date(required=False, default=None, missing=None)
+    due_date = fields.Date(required=False, default=None, missing=None)
 
 class TaskResource(Resource):
     @jwt_required()
@@ -49,7 +49,7 @@ class TaskResource(Resource):
         else:
             category_id = category.category_id
 
-        new_task = Task(user_id=user_id, category_id=category_id, task_title=task['task_title'], task_description=task['task_description'], task_status=task['task_status'], date_to_end=task['date_to_end'])
+        new_task = Task(user_id=user_id, category_id=category_id, task_title=task['task_title'], task_description=task['task_description'], task_status=task['task_status'], due_date=task['due_date'])
         db.session.add(new_task)
         db.session.commit()
 
@@ -73,7 +73,7 @@ class TaskResource(Resource):
                 task.task_title = task['task_title']
                 task.task_description = task['task_description']
                 task.task_status = task['task_status']
-                task.date_to_end = task['date_to_end']
+                task.due_date = task['due_date']
                 db.session.commit()
                 return {'message': 'Tarea actualizada con éxito'}, 200
             
