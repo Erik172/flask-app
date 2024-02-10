@@ -61,6 +61,15 @@ def register():
                 return render_template('register.html', error='Unexpected error')
 
         return render_template('register.html')
+    
+@frontend.route('/create/task', methods=['GET'])
+@jwt_required(optional=True)
+def tasks():
+    current_user = get_jwt_identity()
+    if current_user:
+        return render_template('create_task.html', user=current_user)
+    else:
+        return redirect(url_for('frontend.frontend.login'))
 
 @frontend.route('/test', methods=['GET'])
 @jwt_required(optional=True) 
